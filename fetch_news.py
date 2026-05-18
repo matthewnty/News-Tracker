@@ -3,10 +3,7 @@ import xml.etree.ElementTree as ET
 import requests
 import yfinance as yf
 
-WEBHOOK_URL = os.environ.get(
-    "DISCORD_WEBHOOK_URL",
-    "https://discord.com/api/webhooks/1505249282851078235/xazmWmlLuW7FVMt7l9G-hSjJoKuu3b3rJEhzyzHzogQeJfN68pvR6X7U5fwP-skY0MGb",
-)
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "").strip()
 
 TICKER = "BABA"
 MAX_ARTICLES = 5
@@ -59,6 +56,8 @@ def send_to_discord(articles):
     if not articles:
         print("No news articles found.")
         return
+    if not WEBHOOK_URL:
+        raise ValueError("DISCORD_WEBHOOK_URL is missing or empty.")
 
     lines = [f"**📰 Latest {TICKER} News from Yahoo Finance**\n"]
     for i, article in enumerate(articles, start=1):
